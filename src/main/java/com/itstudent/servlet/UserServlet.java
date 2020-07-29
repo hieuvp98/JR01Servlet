@@ -19,14 +19,7 @@ public class UserServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
-            int id = Integer.parseInt(req.getParameter("id"));
-            AppUser user = dao.findById(id);
-            if (user != null)
-                resp.getWriter().println(user);
-            else {
-                resp.setStatus(400);
-                resp.getWriter().println("user is not exist");
-            }
+            resp.getWriter().println("Hello");
         } catch (Exception e) {
             e.printStackTrace();
             resp.setStatus(500);

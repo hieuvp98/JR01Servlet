@@ -1,6 +1,7 @@
 package com.itstudent.dao;
 
 import com.itstudent.model.AppUser;
+import com.itstudent.model.RegisterForm;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -21,6 +22,33 @@ public class UserDao {
         } catch (Exception ex) {
             ex.printStackTrace();
             return null;
+        }
+    }
+
+    public boolean checkExist(String username){
+        try {
+            String sql = "select * from user where username = ? ";
+            PreparedStatement ps = prepare(sql);
+            ps.setString(1, username);
+            ResultSet rs = ps.executeQuery();
+            return rs.next();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean insertUser(RegisterForm form){
+        try {
+            String sql = "insert into user values (null, ? , ? , ?)";
+            PreparedStatement ps = prepare(sql);
+            ps.setString(1, form.getUsername());
+            ps.setString(2, form.getPassword());
+            ps.setString(3, form.getName());
+            return ps.executeUpdate() > 0;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return false;
         }
     }
 
