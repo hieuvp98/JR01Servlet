@@ -4,6 +4,8 @@ import com.google.gson.Gson;
 import com.itstudent.dao.UserDao;
 import com.itstudent.model.AppUser;
 import com.itstudent.model.LoginForm;
+import com.itstudent.model.Result;
+import com.itstudent.util.EncodeUtil;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -21,14 +23,10 @@ public class LoginServlet extends HttpServlet {
         LoginForm loginForm = gson.fromJson(req.getReader(), LoginForm.class);
         AppUser appUser = dao.checkLogin(loginForm.getUsername(), loginForm.getPassword());
         if (appUser != null) {
-            Cookie cookie = new Cookie("username", appUser.getUsername());
-            cookie.setMaxAge(60 * 60);
-            resp.addCookie(cookie);
-            resp.getWriter().println("login success");
+            resp.getWriter().println(Result.send(EncodeUtil.encode(appUser.getUsername())));
         } else {
             resp.setStatus(400);
-            resp.getWriter().println("login fail");
+            resp.getWriter().println(Result.send("username or password is incorrect"));
         }
-
     }
 }

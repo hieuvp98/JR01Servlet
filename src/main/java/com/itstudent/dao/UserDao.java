@@ -11,16 +11,15 @@ import java.util.List;
 
 public class UserDao {
 
-  public AppUser findById(int id) throws Exception {
+  public AppUser findByUsername(String username) throws Exception {
         try {
-            String sql = "select * from user where id = ?";
+            String sql = "select * from user where username = ?";
             PreparedStatement ps = prepare(sql);
-            ps.setInt(1, id);
+            ps.setString(1, username);
             ResultSet rs = ps.executeQuery();
             rs.first();
             return getObject(rs);
         } catch (Exception ex) {
-            ex.printStackTrace();
             return null;
         }
     }
@@ -33,7 +32,6 @@ public class UserDao {
             ResultSet rs = ps.executeQuery();
             return rs.next();
         } catch (Exception ex) {
-            ex.printStackTrace();
             return false;
         }
     }
@@ -52,6 +50,19 @@ public class UserDao {
         }
     }
 
+    public boolean updateUser(AppUser user){
+        try {
+            String sql = "update user set password = ?, name = ?";
+            PreparedStatement ps = prepare(sql);
+            ps.setString(1, user.getUsername());
+            ps.setString(2, user.getName());
+            return ps.executeUpdate() > 0;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return false;
+        }
+    }
+
    public AppUser checkLogin(String username, String password) {
         try {
             String sql = "select * from user where username = ? and password = ?";
@@ -62,7 +73,6 @@ public class UserDao {
             rs.first();
             return getObject(rs);
         } catch (Exception ex) {
-            ex.printStackTrace();
             return null;
         }
     }
